@@ -79,7 +79,7 @@ public class LexicalAnalayzer {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-			
+
 		functionPrototypeFilter();
 	}
 
@@ -95,7 +95,7 @@ public class LexicalAnalayzer {
 		String fileName = "D:\\codeblocks\\C Program\\p1.c";
 		LexicalAnalayzer obj = new LexicalAnalayzer();
 		obj.fileReading(fileName);
-	//	obj.functionPrototypeFilter();
+		// obj.functionPrototypeFilter();
 		obj.print();
 
 	}
@@ -153,9 +153,12 @@ public class LexicalAnalayzer {
 
 	public void functionPrototypeFilter() {
 
-		String pattern = "\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\(.*\\);";
+		String pattern = "[_a-zA-Z]+[_a-zA-Z0-9]*\\(.*\\);";
+		String string = "";
 
 		Pattern r = Pattern.compile(pattern);
+
+		code = code.replaceAll("\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\((\\s*[_a-zA-Z]+[_a-zA-Z0-9]*,?)*\\);", "");
 
 		String[] arr = code.split(" ");
 
@@ -165,13 +168,14 @@ public class LexicalAnalayzer {
 
 			if (m.find()) {
 
-				if (code.contains(m.group())) {
+			}
 
-				}
+			else {
+				string += word;
 			}
 		}
-		
-		code = code.replaceAll("\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\((\\s*[_a-zA-Z]+[_a-zA-Z0-9]*,?)*\\);", "");
+
+		code = string;
 
 	}
 
@@ -182,3 +186,4 @@ public class LexicalAnalayzer {
 	}
 
 }
+//[_a-zA-Z]+[a-zA-Z0-9]\(([_a-zA-Z]+[,a-zA-Z0-9]*)*\)
