@@ -11,6 +11,11 @@ public class ParseTree {
 	private Queue<Character> queue = new LinkedList<Character>();
 	private LinkedList<String> tree = new LinkedList<String>();
 	private Stack<Character> stack = new Stack<>();
+	private int fristBracketOpen = 0;
+	private int fristBracketClose = 0;
+	private int secoundBracketOpen = 0;
+	private int secoundBracketClose = 0;
+	private String globalVariable[];
 
 	public ParseTree(String code) {
 
@@ -18,6 +23,8 @@ public class ParseTree {
 	}
 
 	public void addToQueue() {
+		
+		String str="";
 
 		try {
 
@@ -29,15 +36,125 @@ public class ParseTree {
 
 				char ch = code.charAt(i);
 
+				if (ch == '(') {
+
+					fristBracketOpen++;
+				}
+
+				if (ch == ')') {
+
+					fristBracketClose++;
+				}
+
+				if (ch == '{') {
+
+					secoundBracketOpen++;
+
+				}
+
+				if (ch == '}') {
+
+					secoundBracketClose++;
+				}
+
 				codeChar.add(ch);
 			}
 
-		} catch (Exception e) {
+			int j;
+			int cS = codeChar.size();
+			 str = "";// this string is for global variable
+			int b1 = 0, b2 = 0, b3 = 0, b4 = 0;
+			// b1=fristBracketOpen
+			// b2=fristBracketClose
+			// b3=secoundBracketOpen
+			// b4=secoundBracketClose
+			String fun="";
+
+			for (j = 0; j < size; j++) {
+
+				char ch = codeChar.peek();
+				codeChar.poll();
+
+				if (ch == '(') {
+
+					b1++;
+					fun+=ch;
+
+					while (b1 != b2) {
+
+						ch = codeChar.peek();
+						codeChar.poll();
+						j++;
+
+						if (ch == '(') {
+							b1++;
+						}
+
+						if (ch == ')') {
+							b2++;
+						}
+						fun+=ch;
+
+					}
+					System.out.println(fun);
+					fun="";
+					
+				}
+
+					if (ch == '{') {
+
+						b3++;
+						fun+=ch;
+						while (b3 != b4) {
+
+							ch = codeChar.peek();
+							codeChar.poll();
+							j++;
+
+							if (ch == '{') {
+								b3++;
+							}
+
+							if (ch == '}') {
+								b4++;
+							}
+							
+							fun+=ch;
+
+						}
+						
+						System.out.println(fun);
+						fun="";
+
+					}
+					
+					str+=ch;
+				}
+				
+				
+			
+			System.out.println(str);
+			
+
+			// parseTreeConstruct();
+
+		} 
+		catch (Exception e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
+		
+		str = str.replaceAll(";\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\)}", ";");
+		System.out.println(str);
+		
+		 globalVariable = str.split(";");
+			
+			for(String d : globalVariable) {
+				
+				System.out.println(d);
+			}
 
 	}
 
@@ -48,30 +165,53 @@ public class ParseTree {
 			int size = codeChar.size();
 			int i;
 
-			for (i = 0; i < size; i++) {
+			String st = "";
+
+			for (i = 0; i < size - 2; i++) {
 
 				char ch;
-				ch = code.charAt(i);
+				ch = codeChar.peek();
+				codeChar.poll();
+
+				if (ch != ';') {
+					st += ch;
+				}
+
+				else {
+					System.out.println(st);
+					st = "";
+				}
+
+				if (ch == '{') {
+
+					ch = codeChar.peek();
+					codeChar.poll();
+
+					while (ch != '}') {
+
+						st += ch;
+						ch = codeChar.peek();
+						codeChar.poll();
+
+					}
+					System.out.println(st);
+					st = "";
+				}
 
 				if (ch == '(') {
 
-					queue.add(ch);
+					ch = codeChar.peek();
+					codeChar.poll();
 
-				}
+					while (ch != ')') {
 
-				else if (ch == ')') {
+						st += ch;
+						ch = codeChar.peek();
+						codeChar.poll();
 
-					queue.add(ch);
-				}
-
-				else if (ch == '{') {
-
-					queue.add(ch);
-				}
-
-				else if (ch == '}') {
-
-					queue.add(ch);
+					}
+					System.out.println(st);
+					st = "";
 
 				}
 
