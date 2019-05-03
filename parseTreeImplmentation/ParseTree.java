@@ -19,9 +19,11 @@ public class ParseTree {
 	private int secoundBracketOpen = 0;
 	private int secoundBracketClose = 0;
 	private static String globalVariable[];
+	private static String function[];
 	private static TreeNode<String> root;
 	//private String node="node";
 	private int strCount=0;
+	private int funCount=0;
 
 	public ParseTree(String code) {
 
@@ -77,7 +79,8 @@ public class ParseTree {
 			String fun = "";
 
 			for (j = 0; j < size; j++) {
-
+				
+				int funCount1=0;
 				char ch = codeChar.peek();
 				codeChar.poll();
 
@@ -102,8 +105,10 @@ public class ParseTree {
 						fun += ch;
 
 					}
-				//	System.out.println(fun);
+					//System.out.println(fun);
+					function[funCount]=fun;
 					fun = "";
+					funCount++;
 
 				}
 
@@ -129,8 +134,10 @@ public class ParseTree {
 
 					}
 
-			//		System.out.println(fun);
+					//System.out.println(fun);
+					function[funCount1]+=fun;
 					fun = "";
+					funCount1++;
 
 				}
 
@@ -144,6 +151,7 @@ public class ParseTree {
 		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
+			System.out.println(e);
 			e.printStackTrace();
 
 		}
@@ -154,9 +162,9 @@ public class ParseTree {
 
 		globalVariable = str.split(";");
 
-		for (String d : globalVariable) {
+		for (String d : function) {
 
-			// System.out.println(d);
+			 System.out.println(d);
 		}
 		
 		//parseTreeConstruct();
