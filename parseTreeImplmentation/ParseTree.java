@@ -4,6 +4,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
+import TreeStructure.SampleData;
+import TreeStructure.TreeNode;
+
 public class ParseTree {
 
 	private String code;
@@ -15,7 +18,10 @@ public class ParseTree {
 	private int fristBracketClose = 0;
 	private int secoundBracketOpen = 0;
 	private int secoundBracketClose = 0;
-	private String globalVariable[];
+	private static String globalVariable[];
+	private static TreeNode<String> root;
+	//private String node="node";
+	private int strCount=0;
 
 	public ParseTree(String code) {
 
@@ -23,8 +29,8 @@ public class ParseTree {
 	}
 
 	public void addToQueue() {
-		
-		String str="";
+
+		String str = "";
 
 		try {
 
@@ -62,13 +68,13 @@ public class ParseTree {
 
 			int j;
 			int cS = codeChar.size();
-			 str = "";// this string is for global variable
+			str = "";// this string is for global variable
 			int b1 = 0, b2 = 0, b3 = 0, b4 = 0;
 			// b1=fristBracketOpen
 			// b2=fristBracketClose
 			// b3=secoundBracketOpen
 			// b4=secoundBracketClose
-			String fun="";
+			String fun = "";
 
 			for (j = 0; j < size; j++) {
 
@@ -78,7 +84,7 @@ public class ParseTree {
 				if (ch == '(') {
 
 					b1++;
-					fun+=ch;
+					fun += ch;
 
 					while (b1 != b2) {
 
@@ -93,72 +99,106 @@ public class ParseTree {
 						if (ch == ')') {
 							b2++;
 						}
-						fun+=ch;
+						fun += ch;
 
 					}
-					System.out.println(fun);
-					fun="";
-					
+				//	System.out.println(fun);
+					fun = "";
+
 				}
 
-					if (ch == '{') {
+				if (ch == '{') {
 
-						b3++;
-						fun+=ch;
-						while (b3 != b4) {
+					b3++;
+					fun += ch;
+					while (b3 != b4) {
 
-							ch = codeChar.peek();
-							codeChar.poll();
-							j++;
+						ch = codeChar.peek();
+						codeChar.poll();
+						j++;
 
-							if (ch == '{') {
-								b3++;
-							}
-
-							if (ch == '}') {
-								b4++;
-							}
-							
-							fun+=ch;
-
+						if (ch == '{') {
+							b3++;
 						}
-						
-						System.out.println(fun);
-						fun="";
+
+						if (ch == '}') {
+							b4++;
+						}
+
+						fun += ch;
 
 					}
-					
-					str+=ch;
+
+			//		System.out.println(fun);
+					fun = "";
+
 				}
-				
-				
-			
-			System.out.println(str);
-			
+
+				str += ch;
+			}
+
+		//	System.out.println(str);
 
 			// parseTreeConstruct();
 
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 
 		}
-		
+
 		str = str.replaceAll(";\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\)}", ";");
-		System.out.println(str);
+		str = str.replaceAll(",", ";");
+	//	System.out.println(str);
+
+		globalVariable = str.split(";");
+
+		for (String d : globalVariable) {
+
+			// System.out.println(d);
+		}
 		
-		 globalVariable = str.split(";");
-			
-			for(String d : globalVariable) {
-				
-				System.out.println(d);
-			}
+		//parseTreeConstruct();
+		
+		TreeNode<String> treeRoot = ParseTree.parseTreeConstruct();
+		for (TreeNode<String> node : treeRoot) {
+			String indent = createIndent(node.getLevel());
+			System.out.println(indent + node.data);
+		}
 
 	}
 
-	public void parseTreeConstruct() {
+	public static TreeNode<String> parseTreeConstruct() {
+
+		root = new TreeNode<String>("root");
+		{
+			for (String d : globalVariable) {
+				
+				//node=node+Integer.toString(strCount);
+				TreeNode<String> node = root.addChild(d);
+				{
+					
+					if(d.contains("=")!=false) {
+						
+						String [] hasEqual =d.split("=");
+						
+						TreeNode<String> node1=node.addChild(hasEqual[0]);
+						TreeNode<String> node2=node.addChild("=");
+						TreeNode<String> node3=node.addChild(hasEqual[1]);
+						
+					}
+					
+				}
+			}
+
+		}
+		
+		return root;
+
+	}
+
+	public void rawParseTreeConstruct() {
 
 		try {
 
@@ -194,7 +234,7 @@ public class ParseTree {
 						codeChar.poll();
 
 					}
-					System.out.println(st);
+				//	System.out.println(st);
 					st = "";
 				}
 
@@ -210,7 +250,7 @@ public class ParseTree {
 						codeChar.poll();
 
 					}
-					System.out.println(st);
+				//	System.out.println(st);
 					st = "";
 
 				}
@@ -224,6 +264,20 @@ public class ParseTree {
 
 		}
 
+	}
+	
+	public String createIndent(int depth) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < depth; i++) {
+			sb.append(' ');
+		}
+		return sb.toString();
+	}
+	
+	public int  getGlobalVariableNumber() {
+		
+		return globalVariable.length;
+		
 	}
 
 }
