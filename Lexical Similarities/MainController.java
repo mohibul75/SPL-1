@@ -31,6 +31,9 @@ public class MainController {
 	private Pane pane;
 	
 	@FXML
+	private AnchorPane pane3;
+	
+	@FXML
 	private Button btn1;
 	
 	@FXML
@@ -53,6 +56,66 @@ public class MainController {
 	@FXML
 	private Label lbl2;
 	
+	@FXML
+	private Label fun1;
+	
+	@FXML
+	private Label fun2;
+	
+	@FXML
+	private Label fun3;
+	
+	@FXML
+	private Label sta1;
+	
+	@FXML
+	private Label sta2;
+	
+	@FXML
+	private Label sta3;
+	
+	@FXML
+	private Label para1;
+	
+	@FXML
+	private Label para2;
+	
+	@FXML
+	private Label para3;
+	
+	@FXML
+	private Label loc1;
+	
+	@FXML
+	private Label loc2;
+	
+	@FXML
+	private Label loc3;
+	
+	@FXML
+	private Label nonloc1;
+	
+	@FXML
+	private Label nonloc2;
+	
+	@FXML
+	private Label nonloc3;
+	
+	@FXML
+	private Label loop1;
+	
+	@FXML
+	private Label loop2;
+	
+	@FXML
+	private Label loop3;
+	
+	@FXML
+	private Label m1;
+	
+	@FXML
+	private Label m2;
+	
 	private  java.io.File file;
 	private String stringFromFile;
 	private String stringFromFileTwo;
@@ -61,8 +124,22 @@ public class MainController {
 	private String [] stringFromFolder;
 	private String [] fileNameOfFolder;
 	private static double clonePercentage;
-	private String newFileName;
+	private String newFileName1;
 	private String newFileName2;
+    private SWMetrics metricsForFile1;
+    private SWMetrics metricsForFile2;
+    private static int numOfLocalVariable1 = 0;
+	private static int numOfNonLocalVariable1 = 0;
+	private static int numOfLoop1 = 0;
+	private static int numOfStatement1 = 0;
+	private static int numOfFunction1 = 0;
+	private static int numOfParameter1 = 0;
+	private static int numOfLocalVariable2 = 0;
+	private static int numOfNonLocalVariable2 = 0;
+	private static int numOfLoop2 = 0;
+	private static int numOfStatement2 = 0;
+	private static int numOfFunction2 = 0;
+	private static int numOfParameter2 = 0;
 	
 	private Map <String ,String> stringFolder = new HashMap<String,String> () ;
 	
@@ -107,13 +184,12 @@ public class MainController {
 		if(seletedFile != null) {
 			CommentDeletion objectForComment=new CommentDeletion();
 			
-			 newFileName=objectForComment.DeleteComment(fileName);
-			stringFromFile=object1.stringConverter(newFileName);
-				
-		}
+			 newFileName1=objectForComment.DeleteComment(fileName);
+			 stringFromFile=object1.stringConverter(newFileName1);
+		     metricsForFile1=new SWMetrics(newFileName1);
 		
-	    LexicalAnalayzer astForFile1=new LexicalAnalayzer(newFileName);
-	    astForFile1.run();
+		     numOfFunction1=metricsForFile1.getNumOfFunction();
+		}
 		
 		
 	}
@@ -162,11 +238,15 @@ public class MainController {
 			//objectForComment.deleteComment(fileName);
 			 newFileName2=objectForComment.DeleteComment(fileName);
 			stringFromFileTwo=object1.stringConverter(newFileName2);
+			
+		    metricsForFile2=new SWMetrics(newFileName2);
+		    
+		    numOfFunction2 =metricsForFile2.getNumOfFunction();
 				
 		}
 		
-	    LexicalAnalayzer astForFile2=new LexicalAnalayzer(newFileName2);
-	    astForFile2.run();
+		
+		
 		
 	/*	DirectoryChooser directoryChooser = new DirectoryChooser();
 		File selectedDirectory = directoryChooser.showDialog(null);
@@ -217,9 +297,6 @@ public class MainController {
 			
 		//	listView1.getItems().add(fileNameOfFolder[i]);
 		//	listView1.getItems().add(new DecimalFormat("##.##").format(clonePercentage)+"%");
-		    
-		    SWMetrics metricsForFile1=new SWMetrics();
-		    SWMetrics metricsForFile2=new SWMetrics();
 		   
 			
 			Parent pane2 = null;
@@ -236,14 +313,47 @@ public class MainController {
 		
 	}
 	
+	public void back() {
+		
+		Parent pane2 = null;
+		try {
+			pane2 = FXMLLoader.load(getClass().getClassLoader().getResource("application/Main.fxml"));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		pane3.getChildren().setAll(pane2);
+		
+		
+	}
 	public void showResult() {
 		
 		lbl1.setText("Lexical Similarities");
 		lbl.setText( clonePercentage+"%");
 		lbl2.setText("Metrics Similaries");
+		m1.setText("Source Code1");
+		m2.setText("Source Code2");
+		fun1.setText("Number Of Function");
+		fun2.setText(String.valueOf(numOfFunction1));
+		fun3.setText(String.valueOf(numOfFunction2));
+		sta1.setText("Number Of  Statement");
+		para1.setText("Number Of  Parameter");
+		loc1.setText("Number Of  Local Variable");
+		nonloc1.setText("Number Of Non-Local Variable");
+		loop1.setText("Number Of Loop");
+		
+		
+		
+		
 		
 	}
 	
+private String valueOf(int y) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 public int length(String str){
         
         str+='\0';
