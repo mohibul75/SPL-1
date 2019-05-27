@@ -33,21 +33,46 @@ public class AbstructSyntaxTree {
 
 		this.code = code;
 	}
-	public AbstructSyntaxTree() {
+/*	public AbstructSyntaxTree() {
 
-	}
+	}*/
 	
 	public int getNumberOfGlobalVariable() {
 
 		return globalVariable.length;
 	}
 	
-	public int getNumberOfFunction() {
+	public void clear() {
+		
+		fristBracketOpen = 0;
+	    fristBracketClose = 0;
+	    secoundBracketOpen = 0;
+        secoundBracketClose = 0;
 
-		return function.length;
+    	 
+
+    	 
+    	 funCount = 0;
+    	funCount1 = 0;
+    	index = 0;
+	}
+	public int getNumberOfFunction() {
+		
+
+		int i=0;
+		for(String s : function) {
+			if(s!=null) {
+				i++;
+				//System.out.println(s);
+			}
+		}
+		
+		return i;
 	}
 
 	public void addToQueue() {
+		
+		clear() ;
 
 		String str = "";
 
@@ -173,15 +198,19 @@ public class AbstructSyntaxTree {
 
 			// TODO Auto-generated catch block
 			System.out.println(e);
+			System.out.println("lala");
 			e.printStackTrace();
 
-		}
-
-		str = str.replaceAll(";\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\)}", ";");
+		}str = str.replaceAll(";\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\)}", ";");
 		str = str.replaceAll(",", ";");
 		// System.out.println(str);
-
-		globalVariable = str.split(";");
+		
+		if(str.contains(";")==false) {
+			
+			str=null;
+			
+		}
+		else globalVariable = str.split(";");
 
 		int i;
 		for (i = 0; i < funCount; i++) {
@@ -190,6 +219,21 @@ public class AbstructSyntaxTree {
 
 				function[i] = function[i] + functionClose[i];
 				//System.out.println(function[i]);
+				function[i]=function[i].replaceAll("void", "");
+				
+				String fun[]=function[i].split(";");
+				function[i]="";
+				for(String h : fun) {
+					
+					h+=";";
+					//System.out.println(h);
+					h=h.replaceAll("[_a-zA-Z]+[_a-zA-Z0-9]*\\(.*\\);", "");
+					
+					function[i]+=h;
+				}
+				
+				
+				//function[i]=function[i].replaceAll("[_a-zA-Z]+[_a-zA-Z0-9]*\\(.*\\);", "");
 			}
 		}
 
@@ -207,62 +251,64 @@ public class AbstructSyntaxTree {
 
 		root = new TreeNode<String>("root");
 		{
-			for (String d : globalVariable) {
+			if (globalVariable != null) {
+				for (String d : globalVariable) {
 
-				// node=node+Integer.toString(strCount);
-				TreeNode<String> node = root.addChild(d);
-				{
+					// node=node+Integer.toString(strCount);
+					TreeNode<String> node = root.addChild(d);
+					{
 
-					if (d.contains("=") != false) {
+						if (d.contains("=") != false) {
 
-						String[] hasEqual = d.split("=");
+							String[] hasEqual = d.split("=");
 
-						TreeNode<String> node1 = node.addChild(hasEqual[0]);
-						TreeNode<String> node2 = node.addChild("=");
-						TreeNode<String> node3 = node.addChild(hasEqual[1]);
+							TreeNode<String> node1 = node.addChild(hasEqual[0]);
+							TreeNode<String> node2 = node.addChild("=");
+							TreeNode<String> node3 = node.addChild(hasEqual[1]);
+
+						}
 
 					}
-
 				}
+
 			}
 
 			for (String d : function) {
-				
-			
 
 				if (d != null) {
 					TreeNode<String> node = root.addChild(d);
 					{
-						
+
 						for (index = 0; index < d.length(); index++) {
 							int openCerlyBrace = 0;
-							
-							
-							String s="";
-							
-							//System.out.println(d.charAt(i));
-							
-							if(d.charAt(index)=='{') {
-			
-								funHandler(d,node);
-							
+
+							String s = "";
+
+							// System.out.println(d.charAt(i));
+
+							if (d.charAt(index) == '{') {
+
+								funHandler(d, node);
+
 							}
-							
-							else if (d.charAt(index) == '(' ) {
+
+							else if (d.charAt(index) == '(') {
 								openCerlyBrace++;
 								while (openCerlyBrace != 0) {
 									index++;
-									if (d.charAt(index) == '(') openCerlyBrace ++;
-									if (d.charAt(index) == ')') openCerlyBrace --;
-									s+=d.charAt(index);
+									if (d.charAt(index) == '(')
+										openCerlyBrace++;
+									if (d.charAt(index) == ')')
+										openCerlyBrace--;
+									s += d.charAt(index);
 
 								}
-								
-								s=s.replaceAll("\\(", "");
-								s=s.replaceAll("\\)", "");
-								String argument [];
+
+								s = s.replaceAll("\\(", "");
+								s = s.replaceAll("\\)", "");
+								String argument[];
 								argument = s.split(";|,");
-								for(String parameter : argument) {
+								for (String parameter : argument) {
 									TreeNode<String> node1 = node.addChild(parameter);
 									{
 										if (parameter.contains("=") != false && parameter.contains("==") == false) {
@@ -274,8 +320,8 @@ public class AbstructSyntaxTree {
 											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
 
 										}
-										
-										else if (parameter.contains("==") != false ) {
+
+										else if (parameter.contains("==") != false) {
 
 											String[] hasEqual = parameter.split("==");
 
@@ -285,8 +331,8 @@ public class AbstructSyntaxTree {
 											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
 
 										}
-										
-										else if (parameter.contains("<") != false ) {
+
+										else if (parameter.contains("<") != false) {
 
 											String[] hasEqual = parameter.split("<");
 
@@ -295,8 +341,8 @@ public class AbstructSyntaxTree {
 											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
 
 										}
-										
-										else if (parameter.contains(">") != false ) {
+
+										else if (parameter.contains(">") != false) {
 
 											String[] hasEqual = parameter.split(">");
 
