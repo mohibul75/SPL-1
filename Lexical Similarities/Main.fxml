@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #a9a9a9;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
+<Pane fx:id="pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: #a9a9a9;" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.MainController">
    <children>
       <Button fx:id="btn1" layoutX="330.0" layoutY="168.0" mnemonicParsing="false" onAction="#fileSelection" prefHeight="60.0" prefWidth="199.0" text="Choose a file" textFill="#3f81c3">
          <font>
@@ -13,7 +13,7 @@
          </font>
       </Button>
       <ListView fx:id="listView" layoutX="307.0" layoutY="280.0" prefHeight="359.0" prefWidth="244.0" />
-      <Button fx:id="btn2" layoutX="771.0" layoutY="175.0" mnemonicParsing="false" onAction="#folderSelection" prefHeight="60.0" prefWidth="199.0" text="choose a  folder" textFill="#b86058">
+      <Button fx:id="btn2" layoutX="771.0" layoutY="175.0" mnemonicParsing="false" onAction="#folderSelection" prefHeight="60.0" prefWidth="199.0" text="choose a  file" textFill="#b86058">
          <font>
             <Font name="System Bold Italic" size="18.0" />
          </font>
