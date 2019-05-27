@@ -1,0 +1,83 @@
+package Metrics;
+
+import AstTreeImplementation.AbstructSyntaxTree;
+import AstTreeImplementation.LexicalAnalayzer;
+
+public class SWMetrics {
+
+	private int numOfLocalVariable = 0;
+	private int numOfNonLocalVariable = 0;
+	private int numOfLoop = 0;
+	private int numOfStatement = 0;
+	private int numOfFunction = 0;
+	private int numOfParameter = 0;
+	
+	private String fileName;
+	private String code;
+
+	public int getNumOfLocalVariable() {
+		return numOfLocalVariable;
+	}
+
+	public void setNumOfLocalVariable() {
+		
+		this.numOfNonLocalVariable = numOfNonLocalVariable;
+	}
+
+	public int getNumOfNonLocalVariable() {
+		setNumOfNonLocalVariable();
+		return numOfNonLocalVariable;
+	}
+
+	public void setNumOfNonLocalVariable() {
+
+		AbstructSyntaxTree obj = new AbstructSyntaxTree(code);
+
+		this.numOfLocalVariable = obj.getNumberOfGlobalVariable();
+	}
+
+	public int getNumOfLoop() {
+		return numOfLoop;
+	}
+
+	public void setNumOfLoop(int numOfLoop) {
+		this.numOfLoop = numOfLoop;
+	}
+
+	public int getNumOfStatement() {
+		return numOfStatement;
+	}
+
+	public void setNumOfStatement(int numOfStatement) {
+		this.numOfStatement = numOfStatement;
+	}
+
+	public int getNumOfFunction() {
+		setNumOfFunction();
+
+		return numOfFunction;
+	}
+
+	public void setNumOfFunction() {
+		
+		AbstructSyntaxTree obj = new AbstructSyntaxTree(code);
+		
+		this.numOfFunction = obj.getNumberOfFunction();
+	}
+
+	public SWMetrics(String fileName) {
+	
+		this.fileName = fileName;
+		LexicalAnalayzer obj=new LexicalAnalayzer(fileName);
+		code=(String) obj.run();
+	}
+
+	public int getNumOfParameter() {
+		return numOfParameter;
+	}
+
+	public void setNumOfParameter(int numOfParameter) {
+		this.numOfParameter = numOfParameter;
+	}
+
+}
