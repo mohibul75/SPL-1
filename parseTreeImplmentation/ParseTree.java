@@ -1,4 +1,4 @@
-package parseTreeImplementation;
+package AstTreeImplementation;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -7,7 +7,7 @@ import java.util.Stack;
 import TreeStructure.SampleData;
 import TreeStructure.TreeNode;
 
-public class ParseTree {
+public class AbstructSyntaxTree {
 
 	private String code;
 	private Queue<Character> codeChar = new LinkedList<Character>();
@@ -19,15 +19,32 @@ public class ParseTree {
 	private int secoundBracketOpen = 0;
 	private int secoundBracketClose = 0;
 	private static String globalVariable[];
-	private static String function[];
+	private static String function[] = new String[1000];
+	private static String functionClose[] = new String[1000];
 	private static TreeNode<String> root;
-	//private String node="node";
-	private int strCount=0;
-	private int funCount=0;
+	private static TreeNode<String> psudoRoot;
+	// private String node="node";
+	private int strCount = 0;
+	private static int funCount = 0;
+	private static int funCount1 = 0;
+	private static int index = 0;
 
-	public ParseTree(String code) {
+	public AbstructSyntaxTree(String code) {
 
 		this.code = code;
+	}
+	public AbstructSyntaxTree() {
+
+	}
+	
+	public int getNumberOfGlobalVariable() {
+
+		return globalVariable.length;
+	}
+	
+	public int getNumberOfFunction() {
+
+		return function.length;
 	}
 
 	public void addToQueue() {
@@ -79,8 +96,7 @@ public class ParseTree {
 			String fun = "";
 
 			for (j = 0; j < size; j++) {
-				
-				int funCount1=0;
+
 				char ch = codeChar.peek();
 				codeChar.poll();
 
@@ -105,10 +121,13 @@ public class ParseTree {
 						fun += ch;
 
 					}
-					//System.out.println(fun);
-					function[funCount]=fun;
+					// System.out.println(fun);
+					if (fun != null) {
+						function[funCount] = fun;
+						funCount++;
+						// funCount++;
+					}
 					fun = "";
-					funCount++;
 
 				}
 
@@ -135,16 +154,18 @@ public class ParseTree {
 					}
 
 					//System.out.println(fun);
-					function[funCount1]+=fun;
-					fun = "";
-					funCount1++;
+					if (fun != null) {
+						functionClose[funCount1] = fun;
+						fun = "";
+						funCount1++;
+					}
 
 				}
 
 				str += ch;
 			}
 
-		//	System.out.println(str);
+			// System.out.println(str);
 
 			// parseTreeConstruct();
 
@@ -158,18 +179,23 @@ public class ParseTree {
 
 		str = str.replaceAll(";\\s*[_a-zA-Z]+[_a-zA-Z0-9]*\\)}", ";");
 		str = str.replaceAll(",", ";");
-	//	System.out.println(str);
+		// System.out.println(str);
 
 		globalVariable = str.split(";");
 
-		for (String d : function) {
+		int i;
+		for (i = 0; i < funCount; i++) {
 
-			 System.out.println(d);
+			if (function[i] != null && functionClose[i] != null) {
+
+				function[i] = function[i] + functionClose[i];
+				//System.out.println(function[i]);
+			}
 		}
-		
-		//parseTreeConstruct();
-		
-		TreeNode<String> treeRoot = ParseTree.parseTreeConstruct();
+
+		// parseTreeConstruct();
+
+		TreeNode<String> treeRoot = AbstructSyntaxTree.parseTreeConstruct();
 		for (TreeNode<String> node : treeRoot) {
 			String indent = createIndent(node.getLevel());
 			System.out.println(indent + node.data);
@@ -182,28 +208,143 @@ public class ParseTree {
 		root = new TreeNode<String>("root");
 		{
 			for (String d : globalVariable) {
-				
-				//node=node+Integer.toString(strCount);
+
+				// node=node+Integer.toString(strCount);
 				TreeNode<String> node = root.addChild(d);
 				{
-					
-					if(d.contains("=")!=false) {
-						
-						String [] hasEqual =d.split("=");
-						
-						TreeNode<String> node1=node.addChild(hasEqual[0]);
-						TreeNode<String> node2=node.addChild("=");
-						TreeNode<String> node3=node.addChild(hasEqual[1]);
-						
+
+					if (d.contains("=") != false) {
+
+						String[] hasEqual = d.split("=");
+
+						TreeNode<String> node1 = node.addChild(hasEqual[0]);
+						TreeNode<String> node2 = node.addChild("=");
+						TreeNode<String> node3 = node.addChild(hasEqual[1]);
+
 					}
-					
+
 				}
 			}
 
+			for (String d : function) {
+				
+			
+
+				if (d != null) {
+					TreeNode<String> node = root.addChild(d);
+					{
+						
+						for (index = 0; index < d.length(); index++) {
+							int openCerlyBrace = 0;
+							
+							
+							String s="";
+							
+							//System.out.println(d.charAt(i));
+							
+							if(d.charAt(index)=='{') {
+			
+								funHandler(d,node);
+							
+							}
+							
+							else if (d.charAt(index) == '(' ) {
+								openCerlyBrace++;
+								while (openCerlyBrace != 0) {
+									index++;
+									if (d.charAt(index) == '(') openCerlyBrace ++;
+									if (d.charAt(index) == ')') openCerlyBrace --;
+									s+=d.charAt(index);
+
+								}
+								
+								s=s.replaceAll("\\(", "");
+								s=s.replaceAll("\\)", "");
+								String argument [];
+								argument = s.split(";|,");
+								for(String parameter : argument) {
+									TreeNode<String> node1 = node.addChild(parameter);
+									{
+										if (parameter.contains("=") != false && parameter.contains("==") == false) {
+
+											String[] hasEqual = parameter.split("=");
+
+											TreeNode<String> node2 = node1.addChild(hasEqual[0]);
+											TreeNode<String> node3 = node1.addChild("=");
+											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
+
+										}
+										
+										else if (parameter.contains("==") != false ) {
+
+											String[] hasEqual = parameter.split("==");
+
+											TreeNode<String> node2 = node1.addChild(hasEqual[0]);
+											TreeNode<String> node3 = node1.addChild("=");
+											TreeNode<String> node31 = node1.addChild("=");
+											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
+
+										}
+										
+										else if (parameter.contains("<") != false ) {
+
+											String[] hasEqual = parameter.split("<");
+
+											TreeNode<String> node2 = node1.addChild(hasEqual[0]);
+											TreeNode<String> node3 = node1.addChild("<");
+											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
+
+										}
+										
+										else if (parameter.contains(">") != false ) {
+
+											String[] hasEqual = parameter.split(">");
+
+											TreeNode<String> node2 = node1.addChild(hasEqual[0]);
+											TreeNode<String> node3 = node1.addChild(">");
+											TreeNode<String> node4 = node1.addChild(hasEqual[1]);
+
+										}
+									}
+								}
+
+							}
+						}
+
+					}
+				}
+
+			}
+
 		}
-		
+
 		return root;
 
+	}
+	
+	public static void funHandler(String line , TreeNode<String> mainNode) {
+		
+		TreeNode<String> node = null;
+		String statement="";
+		for(index=index+1 ; index<line.length() ;index++) {
+			
+			char ch=line.charAt(index);
+
+			if(ch=='}') return;
+			
+			if(ch=='{') {
+				
+				funHandler(line,node);	
+					
+			}
+			
+			statement+=ch;
+			
+		}
+		
+		node=mainNode.addChild(statement);
+	//	return;
+		
 	}
 
 	public void rawParseTreeConstruct() {
@@ -242,7 +383,7 @@ public class ParseTree {
 						codeChar.poll();
 
 					}
-				//	System.out.println(st);
+					// System.out.println(st);
 					st = "";
 				}
 
@@ -258,7 +399,7 @@ public class ParseTree {
 						codeChar.poll();
 
 					}
-				//	System.out.println(st);
+					// System.out.println(st);
 					st = "";
 
 				}
@@ -273,7 +414,7 @@ public class ParseTree {
 		}
 
 	}
-	
+
 	public String createIndent(int depth) {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < depth; i++) {
@@ -281,11 +422,11 @@ public class ParseTree {
 		}
 		return sb.toString();
 	}
-	
-	public int  getGlobalVariableNumber() {
-		
+
+	public int getGlobalVariableNumber() {
+
 		return globalVariable.length;
-		
+
 	}
 
 }
