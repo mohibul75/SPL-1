@@ -23,10 +23,12 @@ public class LexicalAnalayzer {
 		this.fileName = fileName;
 	}
 
-	public void run() {
+	public String run() {
 
 		fileReading();
 		print();
+		
+		return code;
 
 	}
 
