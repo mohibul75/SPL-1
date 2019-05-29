@@ -189,6 +189,12 @@ public class MainController {
 		     metricsForFile1=new SWMetrics(newFileName1);
 		
 		     numOfFunction1=metricsForFile1.getNumOfFunction();
+		     numOfStatement1=metricsForFile1.getNumOfStatement();
+		     numOfLoop1 =metricsForFile1.getNumOfLoop();
+		     numOfNonLocalVariable1=metricsForFile1.getNumOfNonLocalVariable();
+		     numOfLocalVariable1 = metricsForFile1.getNumOfLocalVariable();
+		   //  System.out.println(numOfLoop1);
+		 //    numOfNonLocalVariable1=metricsForFile1.getNumOfNonLocalVariable();
 		}
 		
 		
@@ -242,62 +248,31 @@ public class MainController {
 		    metricsForFile2=new SWMetrics(newFileName2);
 		    
 		    numOfFunction2 =metricsForFile2.getNumOfFunction();
-				
+		    numOfStatement2=metricsForFile2.getNumOfStatement();
+		    numOfLoop2=metricsForFile2.getNumOfLoop();
+		    numOfNonLocalVariable2=metricsForFile2.getNumOfNonLocalVariable();
+		    numOfLocalVariable2 = metricsForFile2.getNumOfLocalVariable();
+		 //  System.out.println(numOfLoop2);
+		//    numOfNonLocalVariable2=metricsForFile2.getNumOfNonLocalVariable();
 		}
 		
 		
 		
-		
-	/*	DirectoryChooser directoryChooser = new DirectoryChooser();
-		File selectedDirectory = directoryChooser.showDialog(null);
-		
-		String folderName=selectedDirectory.getAbsolutePath();
-		
-		if(selectedDirectory != null) {
-			
-			listView1.getItems().add(selectedDirectory.getAbsolutePath());
-		}
-		
-		stringFolder=object2.folderConversionToString(folderName);
-		
-		stringFromFolder=new String [stringFolder.size()];
-		fileNameOfFolder=new String [stringFolder.size()];
-		
-		int number=0;
-		
-		Set<Entry<String, String>> st = stringFolder.entrySet(); 
-
-		for (Entry<String, String> me:st) 
-		{ 
-			fileNameOfFolder[number]=me.getKey(); 
-			stringFromFolder[number]=me.getValue(); 
-			
-			number++;
-		} 
-		*/
 	}
 	
 	public void compare() {
 		
-	//	int i;
-	//	for( i=0 ; i<stringFromFolder.length ; i++) {
 			
 			int [] array = new int[3];
 			
 			EditDistance object3=new EditDistance();
 			
-		//	array[0]=object3.stringMatching(stringFromFolder[i], stringFromFile, length(stringFromFolder[i]),length(stringFromFile));
 			array[0]=object3.stringMatching(stringFromFileTwo, stringFromFile, length(stringFromFileTwo),length(stringFromFile));
-		//	array[1]= length(stringFromFolder[i]);
 			array[1]= length(stringFromFileTwo);
 			array[2]=length(stringFromFile);
 			
 			Calculation object4= new Calculation();
 		    clonePercentage=object4.calculate(array);
-			
-		//	listView1.getItems().add(fileNameOfFolder[i]);
-		//	listView1.getItems().add(new DecimalFormat("##.##").format(clonePercentage)+"%");
-		   
 			
 			Parent pane2 = null;
 			try {
@@ -308,8 +283,6 @@ public class MainController {
 			}
 
 			pane.getChildren().setAll(pane2);
-			
-	//	}
 		
 	}
 	
@@ -331,21 +304,34 @@ public class MainController {
 		
 		lbl1.setText("Lexical Similarities");
 		lbl.setText( clonePercentage+"%");
-		lbl2.setText("Metrics Similaries");
+		lbl2.setText("Metrics Similarities");
+		
 		m1.setText("Source Code1");
 		m2.setText("Source Code2");
+		
 		fun1.setText("Number Of Function");
 		fun2.setText(String.valueOf(numOfFunction1));
 		fun3.setText(String.valueOf(numOfFunction2));
+		
 		sta1.setText("Number Of  Statement");
+		sta2.setText(String.valueOf(numOfStatement1));;
+		sta3.setText(String.valueOf(numOfStatement2));;
+		
 		para1.setText("Number Of  Parameter");
+		para2.setText(String.valueOf(10000));
+		para3.setText(String.valueOf(10000));
+		
 		loc1.setText("Number Of  Local Variable");
+		loc2.setText(String.valueOf(  numOfLocalVariable1 ));
+		loc3.setText(String.valueOf(  numOfLocalVariable2));
+		
 		nonloc1.setText("Number Of Non-Local Variable");
+		nonloc2.setText(String.valueOf( numOfNonLocalVariable1));
+		nonloc3.setText(String.valueOf(numOfNonLocalVariable2));
+		
 		loop1.setText("Number Of Loop");
-		
-		
-		
-		
+		loop2.setText(String.valueOf( numOfLoop1));
+		loop3.setText(String.valueOf( numOfLoop2));
 		
 	}
 	
