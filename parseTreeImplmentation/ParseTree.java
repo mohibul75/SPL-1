@@ -18,16 +18,17 @@ public class AbstructSyntaxTree {
 	private int fristBracketClose = 0;
 	private int secoundBracketOpen = 0;
 	private int secoundBracketClose = 0;
-	private static String globalVariable[];
+	private  String globalVariable[];
 	private static String function[] = new String[1000];
-	private static String functionClose[] = new String[1000];
-	private static TreeNode<String> root;
-	private static TreeNode<String> psudoRoot;
+	private  String functionClose[] = new String[1000];
+	private  TreeNode<String> root;
+	private  TreeNode<String> psudoRoot;
 	// private String node="node";
 	private int strCount = 0;
-	private static int funCount = 0;
-	private static int funCount1 = 0;
-	private static int index = 0;
+	private int funCount = 0;
+	private int funCount1 = 0;
+	private int index = 0;
+	private int gobal=0;
 
 	public AbstructSyntaxTree(String code) {
 
@@ -37,10 +38,6 @@ public class AbstructSyntaxTree {
 
 	}*/
 	
-	public int getNumberOfGlobalVariable() {
-
-		return globalVariable.length;
-	}
 	
 	public void clear() {
 		
@@ -210,7 +207,11 @@ public class AbstructSyntaxTree {
 			str=null;
 			
 		}
-		else globalVariable = str.split(";");
+		else {
+			
+			globalVariable = str.split(";");
+
+		}
 
 		int i;
 		for (i = 0; i < funCount; i++) {
@@ -239,20 +240,27 @@ public class AbstructSyntaxTree {
 
 		// parseTreeConstruct();
 
-		TreeNode<String> treeRoot = AbstructSyntaxTree.parseTreeConstruct();
+		TreeNode<String> treeRoot = parseTreeConstruct();
 		for (TreeNode<String> node : treeRoot) {
 			String indent = createIndent(node.getLevel());
 			System.out.println(indent + node.data);
 		}
 
 	}
+	
+	public int getNumberOfGlobalVariable() {
 
-	public static TreeNode<String> parseTreeConstruct() {
+		System.out.println(gobal);
+		return gobal;
+	}
+
+	public  TreeNode<String> parseTreeConstruct() {
 
 		root = new TreeNode<String>("root");
 		{
 			if (globalVariable != null) {
 				for (String d : globalVariable) {
+					gobal++;
 
 					// node=node+Integer.toString(strCount);
 					TreeNode<String> node = root.addChild(d);
@@ -368,7 +376,7 @@ public class AbstructSyntaxTree {
 
 	}
 	
-	public static void funHandler(String line , TreeNode<String> mainNode) {
+	public  void funHandler(String line , TreeNode<String> mainNode) {
 		
 		TreeNode<String> node = null;
 		String statement="";
